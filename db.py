@@ -12,6 +12,7 @@ chat_id = "5466480235"
 @app.route("/")
 def rout():
     bot.send_message(chat_id=chat_id,text="Har doimgdik 'Hello wordl'")
+    print("Index id")
     return "Har doimgek 'Hello worlld!'"
 
 if __name__=="__main__":
