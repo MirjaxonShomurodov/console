@@ -15,7 +15,7 @@ chat_id = "5466480235"
 @app.route('/',methods=['POST'])
 def name():
 
-    bot.send_message(chat_id=chat_id,text="Har doimgdik 'Hello World'")
+    # bot.send_message(chat_id=chat_id,text="Har doimgdik 'Hello World'")
     return 'Hello deploymint..'
 
 
