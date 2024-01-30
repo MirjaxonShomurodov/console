@@ -11,9 +11,8 @@ bot = telegram.Bot(TOKEN)
 chat_id = "5466480235"
 
 @app.route('/',methods=['POST'])
-def main(update:Update,context:CallbackContext):
-    user = update.message.from_user
-   
+def main():
+    user = Update.message.from_user
     bot.send_message(
         chat_id=chat_id,
         text=f"Hello, how are you, thank you for visiting our site {user.first_name}👨🏻‍💻"
