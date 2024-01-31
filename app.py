@@ -11,50 +11,41 @@ TOKEN = "6333225235:AAFbjxLb1QS7zZIW4maMZ4-CtRNybDdH6ys"
 URL = "http://mirjaxon.pythonanywhere.com/"
 
 bot = telegram.Bot(TOKEN)
-LIKES,DISLIKES = 0,0
 
-def start(update:Update,context:CallbackContext):
-        user = update.message.from_user
-        keyboard = ReplyKeyboardMarkup(
-            keyboard=[
-                [KeyboardButton(text="👍"),KeyboardButton(text="👎")],
-                [KeyboardButton(text='🆑')]
-                ],
-            resize_keyboard=True
-        )
-        update.message.reply_html(
-            text=f"Hello welcome to our bot {user.first_name}",
-            reply_markup=keyboard
-        )
-
-def like(update:Update,context:CallbackContext):
-        global LIKES
-        LIKES+=1
-        update.message.reply_text(text=f"likes:{LIKES}\ndislike: {DISLIKES}")
-
-def dislikes(update:Update,context:CallbackContext):
-        global DISLIKES
-        DISLIKES+=1
-        update.message.reply_html(text=f"likes:{LIKES}\ndislike:{DISLIKES}")
 
 @app.route('/',methods = ['POST'])
 def main():
     data = request.get_json()
     chat_id = data['message']['chat']['id']
-    bot.send_message(chat_id=chat_id,text=data['message']['text'])
+    if ['message'].get('message')!=None:   
+        bot.send_message(chat_id=chat_id,text=data['message']['text'])
 
-    update = Updater(TOKEN)
+    elif ['message'].get('photo')!=None:
+        bot.send_photo(chat_id=chat_id,photo=['message']['photo'][-1])
 
-    dispatcher = update.dispatcher
- 
-    dispatcher.add_handler(handler=CommandHandler(command='start',callback=start))
+    elif ['message'].get('audio')!=None:
+        bot.send_audio(chat_id=chat_id,audio = ['message']['audio'])
 
-    dispatcher.add_handler(handler=MessageHandler(filters = Filters.text('👍'),callback=like))
-    dispatcher.add_handler(handler=MessageHandler(filters = Filters.text('👎'),callback=dislikes))
+    elif ['message'].get('contact')!=None:
+        bot.send_contact(chat_id=chat_id,contact=['message']['contact'],full_name=['message']['from_user'])
 
-    update.start_polling()
-    update.idle()
-        
+    elif ['message'].get('animation')!=None:
+        bot.send_animation(chat_id=chat_id,misc=['message']['animation'])
+
+    elif ['message'].get('dice')!=None:
+        bot.send_dice(chat_id=chat_id,text=['message']['dice'])
+
+    elif ['message'].get('location')!=None:
+        bot.send_location(chat_id=chat_id,text = ['message']['location'])
+
+    elif ['message'].get('sticker')!=None:
+        bot.send_sticker(chat_id=chat_id,text=['message']['sticker'])
+
+    elif ['message'].get('poll')!=None:
+        bot.send_poll(chat_id=chat_id,is_anonymous=True)
+
+    elif ['message'].get('document')!=None:
+        bot.send_document(chat_id=chat_id,text = ['message']['document'])
     return 'Hello deploymint!'
 
 if __name__=="__main__":
